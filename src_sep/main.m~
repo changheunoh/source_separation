@@ -1,0 +1,21 @@
+[x,fs] = audioread('Drum+Bass.wav');
+% soundsc(x,fs); 
+win = 256;
+fft_size = 1024;
+hop = 128;
+
+[result, t, f]=STFT(x,fs, 'hann', win, hop, fft_size);
+imagesc(abs(result));
+
+db_result_hop = mag2db(abs(result));
+f_disp = size(result, 1);
+freq = Fs/2/f_disp;
+time = 512/Fs;
+
+figure, imagesc(db_result_hop);
+set(gca,'YDir','normal')
+xlabel( ['Time (s) x ' num2str(time)] )
+ylabel(['Frequency (Hz) x ' num2str(freq)] )
+
+
+
