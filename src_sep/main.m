@@ -4,8 +4,9 @@ win = 256;
 fft_size = 1024;
 hop = 128;
 
-[result, t, f]=STFT(x,fs, 'hann', win, hop, fft_size);
+[result, f, t] = stft(x, 256, hop, fft_size, fs);
 % imagesc(abs(result));
+%%
 
 db_result = mag2db(abs(result));
 f_disp = size(result, 1);
@@ -74,3 +75,17 @@ set(gca,'YDir','normal')
 xlabel( ['Time (s) x ' num2str(time)] )
 ylabel(['Frequency (Hz) x ' num2str(freq)] )
 
+
+
+%%
+[y, t] = istft(result, hop, fft_size, fs);
+% soundsc(y',fs);
+
+[y_H_hat, t] = istft(H_hat, hop, fft_size, fs);
+[y_H_hat2, t] = istft(time_smooth_spect, hop, fft_size, fs);
+% soundsc(y_H_hat', fs);
+
+[y_P_hat, t] = istft(P_hat, hop, fft_size, fs);
+% soundsc(y_P_hat', fs);
+
+soundsc(y_H_hat2', fs);

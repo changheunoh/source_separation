@@ -1,58 +1,60 @@
-function [result, t, f]=STFT(orig,Fs, window_type, window_size, hop_size, FFT_size)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%              Short-Time Fourier Transform            %
+%               with MATLAB Implementation             %
+%                                                      %
+% Author: M.Sc. Eng. Hristo Zhivomirov       12/21/13  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% window_type,      window_size,    hop_size,   FFT_size
-%     'boxcar'      default=        default=    default=
-%     'bartlett'        
-%     'hann'        
-%     'hamming'        
-%     'blackman'
+function [stft, f, t] = stft(x, wlen, h, nfft, fs)
 
-size_measure = int32( size(orig));
-%picking one channel only
-if(size(orig, 2)~=1)
-    orig = squeeze(orig(:,1));
+% function: [stft, f, t] = stft(x, wlen, h, nfft, fs)
+% x - signal in the time domain
+% wlen - length of the hamming window
+% h - hop size
+% nfft - number of FFT points
+% fs - sampling frequency, Hz
+% f - frequency vector, Hz
+% t - time vector, s
+% stft - STFT matrix (only unique points, time across columns, freq across rows)
+
+% represent x as column-vector if it is not
+if size(x, 2) > 1
+    x = x';
 end
 
-size_orig=size_measure(1,1);
+% length of the signal
+xlen = length(x);
 
-switch window_type
-    case 'boxcar'
-        selected_window = ones(window_size,1);
-    case 'bartlett'
-        selected_window = bartlett(window_size);
-    case 'hann'
-        selected_window = hann(window_size);
-    case 'hamming'
-        selected_window = hamming(window_size);
-	case 'blackman'
-      	selected_window = blackman(window_size);
-%     otherwise                    
+% form a periodic hamming window
+win = hamming(wlen, 'periodic');
+
+% form the stft matrix
+rown = ceil((1+nfft)/2);            % calculate the total number of rows
+coln = 1+fix((xlen-wlen)/h);        % calculate the total number of columns
+stft = zeros(rown, coln);           % form the stft matrix
+
+% initialize the indexes
+indx = 0;
+col = 1;
+
+% perform STFT
+while indx + wlen <= xlen
+    % windowing
+    xw = x(indx+1:indx+wlen).*win;
+    
+    % FFT
+    X = fft(xw, nfft);
+    
+    % update the stft matrix
+    stft(:, col) = X(1:rown);
+    
+    % update the indexes
+    indx = indx + h;
+    col = col + 1;
 end
 
+% calculate the time and frequency vectors
+t = (wlen/2:h:wlen/2+(coln-1)*h)/fs;
+f = (0:rown-1)*fs/nfft;
 
-bin_size = ceil( double(double(size_orig)/double(hop_size)) ) ; % number of bin size
-bin_orig = zeros(FFT_size, bin_size);
-
-for ii = 1:(bin_size -1)
-    if ( window_size + (ii-1)*hop_size )>size_orig
-        temp_padding = zeros(window_size, 1);
-        temp_padding(1: size_orig - (ii-1)*hop_size) = orig( 1 + (ii-1)*hop_size : size_orig );
-        bin_orig(1:window_size, ii) = temp_padding .* selected_window;
-    else
-        bin_orig(1:window_size, ii) = orig( 1 + (ii-1)*hop_size : window_size + (ii-1)*hop_size ) .* selected_window;
-    end
-end
-temp_padding = zeros(window_size, 1);
-temp_padding(1:size_orig - hop_size*(bin_size-1)) = orig( 1 + hop_size*(bin_size-1) : size_orig );
-bin_orig(1:window_size, bin_size)  = temp_padding .* selected_window;
-
-f_disp = ceil( (FFT_size+1)/2 );
-result_full = zeros(FFT_size,bin_size);
-result = zeros( f_disp, bin_size);
-for ii = 1 : bin_size
-    result_full(:,ii) = fft(bin_orig(:,ii));
-    result(:,ii) = result_full(1:f_disp, ii);
-end
-t=(0:hop_size:size_orig)/Fs;
-f = (0:f_disp-1)*Fs/(f_disp-1)/2;
 end
