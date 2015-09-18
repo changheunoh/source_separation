@@ -1,5 +1,3 @@
-
-
 [x,fs] = audioread('Drum+Bass.wav');
 
 

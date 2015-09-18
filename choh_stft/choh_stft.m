@@ -1,7 +1,11 @@
 function [spect, f, t] = choh_stft(x, window_size, hop_size, fft_size, fs)
     if size(x, 2) > size(x, 1)
-        x = x';
+        x = x';        
     end
+    if size(x,2)==2
+        x = x(:,1);
+    end
+    
     xlen = length(x);    
     win = hamming(window_size, 'periodic');
     freq_bin = fft_size/2;

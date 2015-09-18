@@ -1,6 +1,9 @@
 
+% 
+% [x,fs] = audioread('Drum+Bass.wav');
+[x,fs] = audioread('BrianEno_extract.wav');
+% [x,fs] = audioread('KeikoMatsui_extract.wav');
 
-[x,fs] = audioread('Drum+Bass.wav');
 
 
 window_size = 256;
@@ -20,4 +23,6 @@ ylabel(['Frequency (Hz) x ' num2str(freq)] )
 
 % soundsc(x,fs)
 recon = choh_istft(spect, window_size, hop_size );
+
+% soundsc(x(:,1),fs);
 soundsc(recon,fs);
