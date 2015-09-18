@@ -3,7 +3,7 @@ clear all; close all; clc;
 
 % Read in audio file
 % [x fs] = wavread('Mary');
-[x fs] = wavread('Drum+Bass');
+[x fs] = audioread('Drum+Bass.wav');
 
 
 %% STFT
