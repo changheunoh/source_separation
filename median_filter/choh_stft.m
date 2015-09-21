@@ -7,7 +7,7 @@ function [spect, f, t] = choh_stft(x, window_size, hop_size, fft_size, fs)
     end
     
     xlen = length(x);    
-    win = hamming(window_size, 'periodic');
+    win = hann(window_size, 'periodic');
     freq_bin = fft_size/2;
     time_bin = ceil((xlen - window_size)/hop_size) + 1;
     

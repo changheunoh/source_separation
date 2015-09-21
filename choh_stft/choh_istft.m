@@ -3,10 +3,12 @@ function recon = choh_istft(spect, window_size, hop_size )
     time_bin = size(spect,2);
     
     if (hop_size/window_size)==0.25
-        win = hamming(window_size, 'periodic');
+        win = hann(window_size, 'periodic');
     elseif (hop_size/window_size)==0.5
         index = 1/window_size:1/window_size:1;
         win = sin(pi*index');
+        
+%         win = hann(window_size, 'periodic');
     else
         win = 1:window_size;
     end

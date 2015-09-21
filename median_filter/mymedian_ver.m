@@ -6,8 +6,13 @@ function y=mymedian_ver(spectrogram, median_length)
     
     y = zeros(size(spectrogram));
     for ii=1:time_length
-        for jj=(1+gap):(freq_length-gap)
-            y(jj,ii) = median( spectrogram(jj-gap:jj+gap, ii) );
+        for jj=(1):(freq_length-gap)
+            
+            if(jj-gap < 1)
+                y(jj,ii) = median( spectrogram(1:jj+gap, ii) );
+            else
+                y(jj,ii) = median( spectrogram(jj-gap:jj+gap, ii) );
+            end
         end
     end
 end
