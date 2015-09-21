@@ -104,7 +104,13 @@ soundsc(recon_origin, fs);
 % soundsc(recon_MH_SF_hat, fs);
 % soundsc(recon_MP_SF_hat, fs);
 
-
+% audiowrite('recon_origin.wav',recon_origin,fs);
+% audiowrite('recon_time_smooth.wav',recon_time_smooth,fs);
+% audiowrite('recon_freq_smooth.wav',recon_freq_smooth,fs);
+% audiowrite('recon_H_hat.wav',recon_H_hat,fs);
+% audiowrite('recon_P_hat.wav',recon_P_hat,fs);
+% audiowrite('recon_MH_SF_hat.wav',recon_MH_SF_hat,fs);
+% audiowrite('recon_MP_SF_hat.wav',recon_MP_SF_hat,fs);
 
 
 
