@@ -3,17 +3,16 @@ function recon = choh_istft(spect, window_size, hop_size )
     time_bin = size(spect,2);
     
     if (hop_size/window_size)==0.25
-        win = (2/3)*hann(window_size, 'periodic');
-    
+        Nelements = window_size/hop_size;
+        norm = 0.25*Nelements + 0.25*0.5*Nelements;
+        win = (1/norm)*hann(window_size, 'periodic');    
     elseif (hop_size/window_size)==0.5
-%         index = 0:1/(window_size-1):1;
-%         win = sin(pi*index');
-%         win = hamming(window_size, 'periodic');
-%         win = hann(window_size, 'periodic');
-        win = ones(window_size, 1);
-        
+        index = 0:1/(window_size-1):1;
+        win = sin(pi*index');        
     else
-        win = hann(window_size, 'periodic');
+        Nelements = window_size/hop_size;
+        norm = 0.25*Nelements + 0.25*0.5*Nelements;
+        win = (1/norm)*hann(window_size, 'periodic');
     end
     
     

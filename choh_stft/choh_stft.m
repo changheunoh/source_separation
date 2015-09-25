@@ -6,8 +6,19 @@ function [spect, f, t] = choh_stft(x, window_size, hop_size, fft_size, fs)
         x = x(:,1);
     end
     
+    % generate window
+    if (hop_size/window_size)==0.25
+        win = hann(window_size, 'periodic');          
+    elseif (hop_size/window_size)==0.5
+        index = 0:1/(window_size-1):1;
+        win = sin(pi*index');
+    else
+        win = hann(window_size, 'periodic');
+    end
+    
+    
+    
     xlen = length(x);    
-    win = hann(window_size, 'periodic');
     freq_bin = fft_size/2;
     time_bin = ceil((xlen - window_size)/hop_size) + 1;
     
