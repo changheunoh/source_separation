@@ -11,7 +11,7 @@ index = 1:2*fs;
 window_size = 256;
 fft_size = 1024;
 hop_size = window_size*0.25; % 25 percent
-hop_size = window_size*0.5; % 50 percent
+% hop_size = window_size*0.5; % 50 percent
 % hop_size = window_size*0.75; % 75 percent
 % hop_size = window_size*0.125; % 50 percent
 
